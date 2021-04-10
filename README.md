@@ -1,2 +1,2 @@
-# qb-jewellery
+# qb-jewelery
 Jewelry Robbery For QB-Core
