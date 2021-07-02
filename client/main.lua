@@ -1,14 +1,3 @@
-QBCore = nil
-
-Citizen.CreateThread(function()
-    while QBCore == nil do
-    	TriggerEvent('QBCore:GetObject', function(obj) QBCore = obj end)
-    	Citizen.Wait(200)
-    end
-end)
-
--- Code
-
 local robberyAlert = false
 local isLoggedIn = false
 local firstAlarm = false
