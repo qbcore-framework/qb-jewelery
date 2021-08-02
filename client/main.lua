@@ -67,7 +67,7 @@ Citizen.CreateThread(function()
                                     if validWeapon() then
                                         local data = {displayCode = '112', description = 'Suspicious Activity', isImportant = 0, recipientList = {'police'}, length = '10000', infoM = 'fa-info-circle', info = 'Vangelico Jewelry Store'}
                                         local dispatchData = {dispatchData = data, caller = 'Alarm', coords = vector3(-633.9, -241.7, 38.1)}
-                                        TriggerServerEvent('wf-alerts:svNotify', dispatchData)
+                                        TriggerServerEvent('qb-jewellery:server:PoliceAlertMessage', "Suspicious situation", pos, true)
                                         firstAlarm = true
                                     end
                                 end
@@ -145,7 +145,7 @@ function smashVitrine(k)
         TriggerServerEvent('qb-jewellery:server:setTimeout')
         local data = {displayCode = '211A', description = 'Robbery', isImportant = 1, recipientList = {'police'}, length = '10000', infoM = 'fa-info-circle', info = 'Vangelico Jewelry Store'}
         local dispatchData = {dispatchData = data, caller = 'Alarm', coords = vector3(-633.9, -241.7, 38.1)}
-        TriggerServerEvent('wf-alerts:svNotify', dispatchData)
+        TriggerServerEvent('qb-jewellery:server:PoliceAlertMessage', "Jewellery robery", plyCoords, false)
         smashing = false
         TaskPlayAnim(ped, animDict, "exit", 3.0, 3.0, -1, 2, 0, 0, 0, 0)
     end, function() -- Cancel
