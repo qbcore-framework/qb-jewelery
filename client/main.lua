@@ -55,7 +55,8 @@ Citizen.CreateThread(function()
                                                     QBCore.Functions.Notify('Your weapon is not strong enough..', 'error')
                                                 end
                                             else
-                                                QBCore.Functions.Notify('There are not enough police', 'error')
+                                                QBCore.Functions.Notify('Not Enough Police (".. Config.RequiredCops .." Required', 'error')
+													
                                             end                
                                         end)
                                     end
