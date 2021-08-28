@@ -163,12 +163,12 @@ Config.Locations = {
         ["isBusy"] = false, 
     },
     [19] = {
-        ["coords"] = vector3(-624.91, -227.87, 38.05),,
+        ["coords"] = vector3(-624.91, -227.87, 38.05),
         ["isOpened"] = false,
         ["isBusy"] = false, 
     },
     [20] = {
-        ["coords"] = vector3(-623.94, -228.05, 38.05),,
+        ["coords"] = vector3(-623.94, -228.05, 38.05),
         ["isOpened"] = false,
         ["isBusy"] = false,
     }
