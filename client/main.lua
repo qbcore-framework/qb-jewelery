@@ -17,17 +17,15 @@ function DrawText3Ds(x, y, z, text)
     ClearDrawOrigin()
 end
 
-RegisterNetEvent('QBCore:Client:OnPlayerLoaded')
-AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
+RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
     isLoggedIn = true
 end)
 
-RegisterNetEvent('QBCore:Client:OnPlayerUnload')
-AddEventHandler('QBCore:Client:OnPlayerUnload', function()
+RegisterNetEvent('QBCore:Client:OnPlayerUnload', function()
     isLoggedIn = false
 end)
 
-Citizen.CreateThread(function()
+CreateThread(function()
     while true do
         local ped = PlayerPedId()
         local pos = GetEntityCoords(ped)
@@ -79,19 +77,19 @@ Citizen.CreateThread(function()
         end
 
         if not inRange then
-            Citizen.Wait(2000)
+            Wait(2000)
         end
 
-        Citizen.Wait(3)
+        Wait(3)
     end
 end)
 
 function loadParticle()
 	if not HasNamedPtfxAssetLoaded("scr_jewelheist") then
-    RequestNamedPtfxAsset("scr_jewelheist")
+		RequestNamedPtfxAsset("scr_jewelheist")
     end
     while not HasNamedPtfxAssetLoaded("scr_jewelheist") do
-    Citizen.Wait(0)
+		Wait(0)
     end
     SetPtfxAssetNextCall("scr_jewelheist")
 end
@@ -99,7 +97,7 @@ end
 function loadAnimDict(dict)  
     while (not HasAnimDictLoaded(dict)) do
         RequestAnimDict(dict)
-        Citizen.Wait(3)
+        Wait(3)
     end
 end
 
@@ -155,31 +153,28 @@ function smashVitrine(k)
     end)
     TriggerServerEvent('qb-jewellery:server:setVitrineState', "isBusy", true, k)
 
-    Citizen.CreateThread(function()
+    CreateThread(function()
         while smashing do
             loadAnimDict(animDict)
             TaskPlayAnim(ped, animDict, animName, 3.0, 3.0, -1, 2, 0, 0, 0, 0 )
-            Citizen.Wait(500)
+            Wait(500)
             TriggerServerEvent("InteractSound_SV:PlayOnSource", "breaking_vitrine_glass", 0.25)
             loadParticle()
             StartParticleFxLoopedAtCoord("scr_jewel_cab_smash", plyCoords.x, plyCoords.y, plyCoords.z, 0.0, 0.0, 0.0, 1.0, false, false, false, false)
-            Citizen.Wait(2500)
+            Wait(2500)
         end
     end)
 end
 
-RegisterNetEvent('qb-jewellery:client:setVitrineState')
-AddEventHandler('qb-jewellery:client:setVitrineState', function(stateType, state, k)
+RegisterNetEvent('qb-jewellery:client:setVitrineState', function(stateType, state, k)
     Config.Locations[k][stateType] = state
 end)
 
-RegisterNetEvent('qb-jewellery:client:setAlertState')
-AddEventHandler('qb-jewellery:client:setAlertState', function(bool)
+RegisterNetEvent('qb-jewellery:client:setAlertState', function(bool)
     robberyAlert = bool
 end)
 
-RegisterNetEvent('qb-jewellery:client:PoliceAlertMessage')
-AddEventHandler('qb-jewellery:client:PoliceAlertMessage', function(title, coords, blip)
+RegisterNetEvent('qb-jewellery:client:PoliceAlertMessage', function(title, coords, blip)
     if blip then
         TriggerEvent('qb-policealerts:client:AddPoliceAlert', {
             timeOut = 5000,
@@ -201,9 +196,9 @@ AddEventHandler('qb-jewellery:client:PoliceAlertMessage', function(title, coords
             callSign = QBCore.Functions.GetPlayerData().metadata["callsign"],
         })
         PlaySound(-1, "Lose_1st", "GTAO_FM_Events_Soundset", 0, 0, 1)
-        Citizen.Wait(100)
+        Wait(100)
         PlaySound(-1, "Lose_1st", "GTAO_FM_Events_Soundset", 0, 0, 1)
-        Citizen.Wait(100)
+        Wait(100)
         PlaySound(-1, "Lose_1st", "GTAO_FM_Events_Soundset", 0, 0, 1)
         local transG = 100
         local blip = AddBlipForRadius(coords.x, coords.y, coords.z, 100.0)
@@ -267,15 +262,13 @@ function IsWearingHandshoes()
     return retval
 end
 
-Citizen.CreateThread(function()
+CreateThread(function()
     Dealer = AddBlipForCoord(Config.JewelleryLocation["coords"]["x"], Config.JewelleryLocation["coords"]["y"], Config.JewelleryLocation["coords"]["z"])
-
     SetBlipSprite (Dealer, 617)
     SetBlipDisplay(Dealer, 4)
     SetBlipScale  (Dealer, 0.7)
     SetBlipAsShortRange(Dealer, true)
     SetBlipColour(Dealer, 3)
-
     BeginTextCommandSetBlipName("STRING")
     AddTextComponentSubstringPlayerName("Vangelico Jewelry")
     EndTextCommandSetBlipName(Dealer)
