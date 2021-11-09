@@ -1,15 +1,12 @@
 local timeOut = false
-
 local alarmTriggered = false
 
-RegisterServerEvent('qb-jewellery:server:setVitrineState')
-AddEventHandler('qb-jewellery:server:setVitrineState', function(stateType, state, k)
+RegisterNetEvent('qb-jewellery:server:setVitrineState', function(stateType, state, k)
     Config.Locations[k][stateType] = state
     TriggerClientEvent('qb-jewellery:client:setVitrineState', -1, stateType, state, k)
 end)
 
-RegisterServerEvent('qb-jewellery:server:vitrineReward')
-AddEventHandler('qb-jewellery:server:vitrineReward', function()
+RegisterNetEvent('qb-jewellery:server:vitrineReward', function()
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     local otherchance = math.random(1, 4)
@@ -33,8 +30,7 @@ AddEventHandler('qb-jewellery:server:vitrineReward', function()
     end
 end)
 
-RegisterServerEvent('qb-jewellery:server:setTimeout')
-AddEventHandler('qb-jewellery:server:setTimeout', function()
+RegisterNetEvent('qb-jewellery:server:setTimeout', function()
     if not timeOut then
         timeOut = true
         TriggerEvent('qb-scoreboard:server:SetActivityBusy', "jewellery", true)
@@ -53,8 +49,7 @@ AddEventHandler('qb-jewellery:server:setTimeout', function()
     end
 end)
 
-RegisterServerEvent('qb-jewellery:server:PoliceAlertMessage')
-AddEventHandler('qb-jewellery:server:PoliceAlertMessage', function(title, coords, blip)
+RegisterNetEvent('qb-jewellery:server:PoliceAlertMessage', function(title, coords, blip)
     local src = source
     local alertData = {
         title = title,
