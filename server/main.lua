@@ -1,5 +1,19 @@
+local QBCore = exports['qb-core']:GetCoreObject()
 local timeOut = false
-local alarmTriggered = false
+
+-- Callback
+
+QBCore.Functions.CreateCallback('qb-jewellery:server:getCops', function(source, cb)
+	local amount = 0
+    for k, v in pairs(QBCore.Functions.GetQBPlayers()) do
+        if v.PlayerData.job.name == "police" and v.PlayerData.job.onduty then
+            amount = amount + 1
+        end
+    end
+    cb(amount)
+end)
+
+-- Events
 
 RegisterNetEvent('qb-jewellery:server:setVitrineState', function(stateType, state, k)
     Config.Locations[k][stateType] = state
@@ -44,47 +58,6 @@ RegisterNetEvent('qb-jewellery:server:setTimeout', function()
                 TriggerEvent('qb-scoreboard:server:SetActivityBusy', "jewellery", false)
             end
             timeOut = false
-            alarmTriggered = false
         end)
     end
-end)
-
-RegisterNetEvent('qb-jewellery:server:PoliceAlertMessage', function(title, coords, blip)
-    local src = source
-    local alertData = {
-        title = title,
-        coords = {x = coords.x, y = coords.y, z = coords.z},
-        description = "Possible robbery going on at Vangelico Jewelry Store<br>Available camera's: 31, 32, 33, 34",
-    }
-
-    for k, v in pairs(QBCore.Functions.GetPlayers()) do
-        local Player = QBCore.Functions.GetPlayer(v)
-        if Player ~= nil then 
-            if (Player.PlayerData.job.name == "police" and Player.PlayerData.job.onduty) then
-                if blip then
-                    if not alarmTriggered then
-                        TriggerClientEvent("qb-phone:client:addPoliceAlert", v, alertData)
-                        TriggerClientEvent("qb-jewellery:client:PoliceAlertMessage", v, title, coords, blip)
-                        alarmTriggered = true
-                    end
-                else
-                    TriggerClientEvent("qb-phone:client:addPoliceAlert", v, alertData)
-                    TriggerClientEvent("qb-jewellery:client:PoliceAlertMessage", v, title, coords, blip)
-                end
-            end
-        end
-    end
-end)
-
-QBCore.Functions.CreateCallback('qb-jewellery:server:getCops', function(source, cb)
-	local amount = 0
-    for k, v in pairs(QBCore.Functions.GetPlayers()) do
-        local Player = QBCore.Functions.GetPlayer(v)
-        if Player ~= nil then 
-            if (Player.PlayerData.job.name == "police" and Player.PlayerData.job.onduty) then
-                amount = amount + 1
-            end
-        end
-	end
-	cb(amount)
 end)
