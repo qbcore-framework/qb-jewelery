@@ -31,6 +31,8 @@ RegisterNetEvent('qb-jewellery:server:vitrineReward', function()
         local amount = math.random(Config.VitrineRewards[item]["amount"]["min"], Config.VitrineRewards[item]["amount"]["max"])
         if Player.Functions.AddItem(Config.VitrineRewards[item]["item"], amount) then
             TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[Config.VitrineRewards[item]["item"]], 'add')
+	    TriggerEvent("qb-log:server:CreateLog", 'jewellery', "Jewellery Loot", "yellow", "**"..Player.PlayerData.name .. "** (citizenid: *" .. Player.PlayerData.citizenid .. "* | id: *(" .. Player.PlayerData.source .. "))*: has looted " ..amount.. " x "..Config.VitrineRewards[item]["item"])  
+				
         else
             TriggerClientEvent('QBCore:Notify', src, 'You have to much in your pocket', 'error')
         end
