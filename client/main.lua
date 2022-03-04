@@ -1,23 +1,9 @@
 local QBCore = exports['qb-core']:GetCoreObject()
 local firstAlarm = false
 local smashing = false
+local inZone = false
 
 -- Functions
-
-local function DrawText3Ds(x, y, z, text)
-	SetTextScale(0.35, 0.35)
-    SetTextFont(4)
-    SetTextProportional(1)
-    SetTextColour(255, 255, 255, 215)
-    SetTextEntry("STRING")
-    SetTextCentre(true)
-    AddTextComponentString(text)
-    SetDrawOrigin(x,y,z, 0)
-    DrawText(0.0, 0.0)
-    local factor = (string.len(text)) / 370
-    DrawRect(0.0, 0.0+0.0125, 0.017+ factor, 0.03, 0, 0, 0, 75)
-    ClearDrawOrigin()
-end
 
 local function loadParticle()
 	if not HasNamedPtfxAssetLoaded("scr_jewelheist") then
@@ -77,7 +63,7 @@ local function smashVitrine(k)
         QBCore.Functions.Notify("You've left a fingerprint on the glass", "error")
     end
     smashing = true
-    QBCore.Functions.Progressbar("smash_vitrine", "Stocking a display", Config.WhitelistedWeapons[pedWeapon]["timeOut"], false, true, {
+    QBCore.Functions.Progressbar("smash_vitrine", "Smashing a display", Config.WhitelistedWeapons[pedWeapon]["timeOut"], false, true, {
         disableMovement = true,
         disableCarMovement = true,
         disableMouse = false,
@@ -130,54 +116,116 @@ CreateThread(function()
     EndTextCommandSetBlipName(Dealer)
 end)
 
-CreateThread(function()
-    while true do
-        local ped = PlayerPedId()
-        local pos = GetEntityCoords(ped)
-        inRange = false
-        if LocalPlayer.state.isLoggedIn then
-            PlayerData = QBCore.Functions.GetPlayerData()
-            for case,_ in pairs(Config.Locations) do
-                local dist = #(pos - vector3(Config.Locations[case]["coords"]["x"], Config.Locations[case]["coords"]["y"], Config.Locations[case]["coords"]["z"]))
-                local storeDist = #(pos - vector3(Config.JewelleryLocation["coords"]["x"], Config.JewelleryLocation["coords"]["y"], Config.JewelleryLocation["coords"]["z"]))
-                if dist < 30 then
-                    inRange = true
+RegisterNetEvent('qb-jewelery:target', function()
+    for k,v in pairs(Config.Locations) do
+        if not Config.Locations[k]["isBusy"] and not Config.Locations[k]["isOpened"] then
+            QBCore.Functions.TriggerCallback('qb-jewellery:server:getCops', function(cops)
+                if cops >= Config.RequiredCops then
+                    if validWeapon() then
+                        smashVitrine(k)
+                    else
+                        QBCore.Functions.Notify('Your weapon is not strong enough..', 'error')
+                    end
+                else
+                    QBCore.Functions.Notify('Not Enough Police ('.. Config.RequiredCops ..') Required', 'error')
+                end
+            end)
+        end
+        if not firstAlarm then
+            if validWeapon() then
+                TriggerServerEvent('police:server:policeAlert', 'Suspicious Activity')
+                firstAlarm = true
+            end
+        end
+    end
+end)
 
-                    if dist < 0.6 then
-                        if not Config.Locations[case]["isBusy"] and not Config.Locations[case]["isOpened"] then
-                            DrawText3Ds(Config.Locations[case]["coords"]["x"], Config.Locations[case]["coords"]["y"], Config.Locations[case]["coords"]["z"], '[E] Smash the display case')
-                            if IsControlJustPressed(0, 38) then
-                                QBCore.Functions.TriggerCallback('qb-jewellery:server:getCops', function(cops)
-                                    if cops >= Config.RequiredCops then
-                                        if validWeapon() then
-                                            smashVitrine(case)
-                                        else
-                                            QBCore.Functions.Notify('Your weapon is not strong enough..', 'error')
-                                        end
-                                    else
-                                        QBCore.Functions.Notify('Not Enough Police ('.. Config.RequiredCops ..') Required', 'error')
-                                    end
-                                end)
+if Config.UseTarget then
+    CreateThread(function()
+        for k, v in pairs(Config.Locations) do
+            exports["qb-target"]:AddBoxZone("jewelstore" .. k, v.coords, 1, 1, {
+                name = "jewelstore" .. k,
+                heading = 40,
+                minZ = 36,
+                maxZ = 40
+            }, {
+                options = {
+                    { 
+                        action = function()
+                            smashVitrine(k)
+                        end,
+                        type = "client",
+                        event = "qb-jewelery:target",
+                        icon = "fa fa-hand",
+                        label = "Smash the display case",
+                        canInteract = function()
+                            if v["isOpened"] or v["isBusy"] then
+                                return false
                             end
+                            return true
+                        end,
+                    }
+                },
+                distance = 1.5
+            })
+
+        end
+    end)
+else
+    CreateThread(function()
+        for k, v in pairs(Config.Locations) do
+            local boxZone = BoxZone:Create(v.coords, 1, 1, {
+                name="jewelstore" .. k,
+                heading = 40,
+                minZ = 36,
+                maxZ = 40
+            })
+            boxZone:onPlayerInOut(function(isPointInside)
+                if isPointInside then
+                    inZone = true
+                else
+                    inZone = false
+                    exports['qb-core']:HideText()
+                end
+            end)
+        end
+    end)
+    CreateThread(function()
+        Wait(1000)
+        while true do
+            local sleep = 1000
+            if inZone then
+                sleep = 5
+                for k, v in pairs(Config.Locations) do
+                    if not Config.Locations[k]["isBusy"] and not Config.Locations[k]["isOpened"] then
+                        exports['qb-core']:DrawText('[E] Smash the display case', 'left')
+                        if IsControlJustPressed(0, 38) then
+                            exports['qb-core']:KeyPressed(38)
+                            QBCore.Functions.TriggerCallback('qb-jewellery:server:getCops', function(cops)
+                                if cops >= Config.RequiredCops then
+                                    if validWeapon() then
+                                        smashVitrine(k)
+                                    else
+                                        QBCore.Functions.Notify('Your weapon is not strong enough..', 'error')
+                                    end
+                                else
+                                    QBCore.Functions.Notify('Not Enough Police ('.. Config.RequiredCops ..') Required', 'error')
+                                end
+                            end)
+                        Wait(12000)
                         end
                     end
-
-                    if storeDist < 2 then
-                        if not firstAlarm then
-                            if validWeapon() then
-                                TriggerServerEvent('police:server:policeAlert', 'Suspicious Activity')
-                                firstAlarm = true
-                            end
+                    if not firstAlarm then
+                        if validWeapon() then
+                            TriggerServerEvent('police:server:policeAlert', 'Suspicious Activity')
+                            firstAlarm = true
                         end
                     end
                 end
+            else
+                sleep = 1000
             end
+            Wait(sleep)
         end
-
-        if not inRange then
-            Wait(2000)
-        end
-
-        Wait(3)
-    end
-end)
+    end)
+end
