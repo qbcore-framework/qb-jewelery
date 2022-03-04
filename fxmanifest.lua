@@ -9,7 +9,7 @@ shared_script 'config.lua'
 client_script {
     'client/main.lua',
     '@PolyZone/client.lua',
-    '@PolyZone/BoxZone.lua',
+    '@PolyZone/BoxZone.lua'
 }
 server_script 'server/main.lua'
 
