@@ -152,7 +152,9 @@ if Config.UseTarget then
                 options = {
                     { 
                         action = function()
-                            smashVitrine(k)
+                            if validWeapon() then
+                                smashVitrine(k)
+                            end
                         end,
                         type = "client",
                         event = "qb-jewelery:target",
