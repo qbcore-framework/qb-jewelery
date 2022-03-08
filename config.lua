@@ -1,5 +1,6 @@
 Config = Config or {}
-Config.UseTarget = false
+
+Config.UseTarget = GetConvar('UseTarget', false)
 
 Config.Timeout = 30 * (60 * 2000)
 Config.RequiredCops = 0
