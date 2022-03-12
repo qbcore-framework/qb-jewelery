@@ -1,6 +1,6 @@
 Config = Config or {}
 
-Config.UseTarget = GetConvar('UseTarget', false)
+Config.UseTarget = GetConvar('UseTarget', false) -- [qb-target interactions] (Do not change this! Go to your server.cfg and add `setr UseTarget true`(For Target) or `setr UseTarget false`(for drawtextui [E] interaction) )
 
 Config.Timeout = 30 * (60 * 2000)
 Config.RequiredCops = 0

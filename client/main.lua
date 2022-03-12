@@ -140,7 +140,37 @@ RegisterNetEvent('qb-jewelery:target', function()
     end
 end)
 
--- Convar Turns into strings
+local listen = false
+local function Listen4Control(case)
+    listen = true
+    CreateThread(function()
+        while listen do
+            if IsControlJustPressed(0, 38) then
+                listen = false
+                if not Config.Locations[case]["isBusy"] and not Config.Locations[case]["isOpened"] then
+                    exports['qb-core']:KeyPressed(38)
+                        if validWeapon() then
+                        QBCore.Functions.TriggerCallback('qb-jewellery:server:getCops', function(cops)
+                            if cops >= Config.RequiredCops then
+                                if validWeapon() then
+                                    smashVitrine(case)
+                                else
+                                    QBCore.Functions.Notify(Lang:t('error.wrong_weapon'), 'error')
+                                end
+                            else
+                                QBCore.Functions.Notify(Lang:t('error.minimum_police', {value = Config.RequiredCops}), 'error')
+                            end
+                        end)
+                    end
+                else
+                    exports['qb-core']:DrawText("Case Broken", 'left')
+                end
+            end
+            Wait(1)
+        end
+    end)
+end
+
 if Config.UseTarget == 'true' then
     CreateThread(function()
         for k, v in pairs(Config.Locations) do
@@ -179,7 +209,7 @@ else
     CreateThread(function()
         for k, v in pairs(Config.Locations) do
             local boxZone = BoxZone:Create(v.coords, 1, 1, {
-                name="jewelstore" .. k,
+                name="jewelstore"..k,
                 heading = 40,
                 minZ = 36,
                 maxZ = 40,
@@ -188,54 +218,14 @@ else
             boxZone:onPlayerInOut(function(isPointInside)
                 if isPointInside then
                     inZone = true
+                    Listen4Control(k)
+                    exports['qb-core']:DrawText("[E] Smash the display case", 'left')
                 else
+                    listen = false
                     inZone = false
                     exports['qb-core']:HideText()
                 end
             end)
-        end
-    end)
-    CreateThread(function()
-        while true do
-            local sleep = 1000
-            if inZone then
-                sleep = 5
-                local pos = GetEntityCoords(PlayerPedId())
-                for k, v in pairs(Config.Locations) do
-                    if #(pos - vector3(v.coords.x, v.coords.y, v.coords.z)) < 1 then
-                        if not Config.Locations[k]["isBusy"] and not Config.Locations[k]["isOpened"] then
-                            exports['qb-core']:DrawText(Lang:t('general.drawtextui_grab'), 'left')
-                            if IsControlJustPressed(0, 38) then
-                                exports['qb-core']:KeyPressed(38)
-                                    if validWeapon() then
-                                    QBCore.Functions.TriggerCallback('qb-jewellery:server:getCops', function(cops)
-                                        if cops >= Config.RequiredCops then
-                                            if validWeapon() then
-                                                smashVitrine(k)
-                                            else
-                                                QBCore.Functions.Notify(Lang:t('error.wrong_weapon'), 'error')
-                                            end
-                                        else
-                                            QBCore.Functions.Notify(Lang:t('error.minimum_police', {value = Config.RequiredCops}), 'error')
-                                        end
-                                    end)
-                                end
-                            end
-                        else
-                            exports['qb-core']:DrawText(Lang:t('general.drawtextui_broken'), 'left')
-                        end
-                    end
-                    if not firstAlarm then
-                        if validWeapon() then
-                            TriggerServerEvent('police:server:policeAlert', 'Suspicious Activity')
-                            firstAlarm = true
-                        end
-                    end
-                end
-            else
-                sleep = 1000
-            end
-            Wait(sleep)
         end
     end)
 end
