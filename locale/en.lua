@@ -7,7 +7,7 @@ local Translations = {
     },
     success = {},
     info = {
-        progressbar = 'You\'ve left a fingerprint on the glass',
+        progressbar = 'Smashing the display case',
     },
     general = {
         target_label = 'Smash the display case',
