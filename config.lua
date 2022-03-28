@@ -1,7 +1,9 @@
 Config = Config or {}
 
+Config.UseTarget = GetConvar('UseTarget', false) -- [qb-target interactions] (Do not change this! Go to your server.cfg and add `setr UseTarget true`(For Target) or `setr UseTarget false`(for drawtextui [E] interaction) )
+
 Config.Timeout = 30 * (60 * 2000)
-Config.RequiredCops = 3
+Config.RequiredCops = 0
 Config.JewelleryLocation = {
     ["coords"] = vector3(-630.5, -237.13, 38.08),
 }
