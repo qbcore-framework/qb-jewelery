@@ -171,7 +171,7 @@ local function Listen4Control(case)
     end)
 end
 
-if Config.UseTarget == 'true' then
+if Config.UseTarget then
     CreateThread(function()
         for k, v in pairs(Config.Locations) do
             exports["qb-target"]:AddBoxZone("jewelstore" .. k, v.coords, 1, 1, {
