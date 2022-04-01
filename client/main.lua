@@ -148,7 +148,7 @@ local function Listen4Control(case)
             if IsControlJustPressed(0, 38) then
                 listen = false
                 if not Config.Locations[case]["isBusy"] and not Config.Locations[case]["isOpened"] then
-                    exports['qb-core']:KeyPressed(38)
+                    exports['qb-core']:KeyPressed()
                         if validWeapon() then
                         QBCore.Functions.TriggerCallback('qb-jewellery:server:getCops', function(cops)
                             if cops >= Config.RequiredCops then
@@ -171,8 +171,8 @@ local function Listen4Control(case)
     end)
 end
 
-if Config.UseTarget == 'true' then
-    CreateThread(function()
+CreateThread(function()
+    if Config.UseTarget then
         for k, v in pairs(Config.Locations) do
             exports["qb-target"]:AddBoxZone("jewelstore" .. k, v.coords, 1, 1, {
                 name = "jewelstore" .. k,
@@ -202,11 +202,8 @@ if Config.UseTarget == 'true' then
                 },
                 distance = 1.5
             })
-
         end
-    end)
-else
-    CreateThread(function()
+    else
         for k, v in pairs(Config.Locations) do
             local boxZone = BoxZone:Create(v.coords, 1, 1, {
                 name="jewelstore"..k,
@@ -227,5 +224,5 @@ else
                 end
             end)
         end
-    end)
-end
+    end
+end)
