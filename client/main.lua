@@ -163,7 +163,7 @@ local function Listen4Control(case)
                         end)
                     end
                 else
-                    exports['qb-core']:DrawText("Case Broken", 'left')
+                    exports['qb-core']:DrawText(Lang:t('general.drawtextui_broken'), 'left')
                 end
             end
             Wait(1)
@@ -216,7 +216,7 @@ CreateThread(function()
                 if isPointInside then
                     inZone = true
                     Listen4Control(k)
-                    exports['qb-core']:DrawText("[E] Smash the display case", 'left')
+                    exports['qb-core']:DrawText(Lang:t('general.drawtextui_grab'), 'left')
                 else
                     listen = false
                     inZone = false
