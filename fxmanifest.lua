@@ -6,7 +6,7 @@ version '1.0.0'
 
 shared_scripts {
     '@qb-core/shared/locale.lua',
-    'locale/en.lua', -- replace with desired language
+    'locale/tc.lua', -- replace with desired language
     'config.lua'
 }
 

@@ -101,7 +101,7 @@ Config.Locations = {
     }, 
     [6] = {
         ["coords"] = vector3(-626.7, -238.58, 38.05),
-      ["isOpened"] = false,
+        ["isOpened"] = false,
         ["isBusy"] = false, 
     },
     [7] = {

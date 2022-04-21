@@ -8,6 +8,7 @@ local Translations = {
     success = {},
     info = {
         progressbar = 'Smashing the display case',
+        blipname = 'Vangelico Jewelry',
     },
     general = {
         target_label = 'Smash the display case',
