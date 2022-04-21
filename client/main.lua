@@ -171,7 +171,7 @@ CreateThread(function()
                             end
                         end,
                         canInteract = function()
-                            if v["isOpened"] or v["isBusy"] then
+                            if not validWeapon() and v["isOpened"] or v["isBusy"] then
                                 return false
                             end
                             return true
