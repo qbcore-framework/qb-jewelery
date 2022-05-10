@@ -1,7 +1,6 @@
 local QBCore = exports['qb-core']:GetCoreObject()
 local firstAlarm = false
 local smashing = false
-local inZone = false
 
 -- Functions
 
@@ -26,7 +25,7 @@ local function validWeapon()
     local ped = PlayerPedId()
     local pedWeapon = GetSelectedPedWeapon(ped)
 
-    for k, v in pairs(Config.WhitelistedWeapons) do
+    for k, _ in pairs(Config.WhitelistedWeapons) do
         if pedWeapon == k then
             return true
         end
@@ -192,12 +191,10 @@ CreateThread(function()
             })
             boxZone:onPlayerInOut(function(isPointInside)
                 if isPointInside then
-                    inZone = true
                     Listen4Control(k)
                     exports['qb-core']:DrawText(Lang:t('general.drawtextui_grab'), 'left')
                 else
                     listen = false
-                    inZone = false
                     exports['qb-core']:HideText()
                 end
             end)
