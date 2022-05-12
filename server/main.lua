@@ -3,9 +3,9 @@ local timeOut = false
 
 -- Callback
 
-QBCore.Functions.CreateCallback('qb-jewellery:server:getCops', function(source, cb)
+QBCore.Functions.CreateCallback('qb-jewellery:server:getCops', function(_, cb)
 	local amount = 0
-    for k, v in pairs(QBCore.Functions.GetQBPlayers()) do
+    for _, v in pairs(QBCore.Functions.GetQBPlayers()) do
         if v.PlayerData.job.name == "police" and v.PlayerData.job.onduty then
             amount = amount + 1
         end
@@ -51,7 +51,7 @@ RegisterNetEvent('qb-jewellery:server:setTimeout', function()
         Citizen.CreateThread(function()
             Citizen.Wait(Config.Timeout)
 
-            for k, v in pairs(Config.Locations) do
+            for k, _ in pairs(Config.Locations) do
                 Config.Locations[k]["isOpened"] = false
                 TriggerClientEvent('qb-jewellery:client:setVitrineState', -1, 'isOpened', false, k)
                 TriggerClientEvent('qb-jewellery:client:setAlertState', -1, false)
