@@ -108,6 +108,12 @@ end
 
 -- Events
 
+RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
+	QBCore.Functions.TriggerCallback('qb-jewellery:server:getVitrineState', function(result)
+		Config.Locations = result
+	end)
+end)
+
 RegisterNetEvent('qb-jewellery:client:setVitrineState', function(stateType, state, k)
     Config.Locations[k][stateType] = state
 end)
