@@ -20,6 +20,10 @@ RegisterNetEvent('qb-jewellery:server:setVitrineState', function(stateType, stat
     TriggerClientEvent('qb-jewellery:client:setVitrineState', -1, stateType, state, k)
 end)
 
+QBCore.Functions.CreateCallback('qb-jewellery:server:getVitrineState', function(_, cb)
+	cb(Config.Locations)
+end)
+
 RegisterNetEvent('qb-jewellery:server:vitrineReward', function()
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
