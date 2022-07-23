@@ -173,6 +173,8 @@ CreateThread(function()
                         action = function()
                             if validWeapon() then
                                 smashVitrine(k)
+                            else
+                                QBCore.Functions.Notify(Lang:t('error.wrong_weapon'), 'error')
                             end
                         end,
                         canInteract = function()
