@@ -32,10 +32,10 @@ local function exploitBan(id, reason)
             QBCore.Functions.GetIdentifier(id, 'ip'),
             reason,
             2147483647,
-            'qb-pawnshop'
+            'qb-jewelery'
         })
-    TriggerEvent('qb-log:server:CreateLog', 'pawnshop', 'Player Banned', 'red',
-        string.format('%s was banned by %s for %s', GetPlayerName(id), 'qb-pawnshop', reason), true)
+    TriggerEvent('qb-log:server:CreateLog', 'jewelery', 'Player Banned', 'red',
+        string.format('%s was banned by %s for %s', GetPlayerName(id), 'qb-jewelery', reason), true)
     DropPlayer(id, 'You were permanently banned by the server for: Exploiting')
 end
 
@@ -56,7 +56,7 @@ RegisterNetEvent('qb-jewellery:server:vitrineReward', function(vitrineIndex)
     local cheating = false
 
     if Config.Locations[vitrineIndex] == nil or Config.Locations[vitrineIndex].isOpened ~= false then
-        exploitBan(src, "Trying to trigger an exploitable event \"qb-jewellery:server:vitrineReward}\"")
+        exploitBan(src, "Trying to trigger an exploitable event \"qb-jewellery:server:vitrineReward\"")
         return
     end
     if cachedPoliceAmount[source] == nil then
@@ -102,10 +102,10 @@ RegisterNetEvent('qb-jewellery:server:vitrineReward', function(vitrineIndex)
     end
 
     if cheating then
-        if flags[src] then 
-            flags[src] = flags[src] + 1 
-        else 
-            flags[src] = 1 
+        if flags[src] then
+            flags[src] = flags[src] + 1
+        else
+            flags[src] = 1
         end
         if flags >= 3 then
             exploitBan("Getting flagged many times from exploiting the \"qb-jewellery:server:vitrineReward\" event")
