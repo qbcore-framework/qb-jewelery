@@ -35,8 +35,8 @@ RegisterNetEvent('qb-jewellery:server:vitrineReward', function(vitrineIndex)
     local otherchance = math.random(1, 4)
     local odd = math.random(1, 4)
 
-    if Config.Locations[vitrineIndex] == nil or Config.Locations[vitrineIndex].isOpened ~= false or cachedPoliceAmount[source] == nil then 
-        DropPlayer(src, "Exploiting") 
+    if Config.Locations[vitrineIndex] == nil or Config.Locations[vitrineIndex].isOpened ~= false or cachedPoliceAmount[source] == nil then
+        DropPlayer(src, "Exploiting")
     end
 
     local plrPed = GetPlayerPed(src)
@@ -69,11 +69,11 @@ RegisterNetEvent('qb-jewellery:server:vitrineReward', function(vitrineIndex)
                     end
                 end
             else
-                DropPlayer(src, "Exploiting") 
+                DropPlayer(src, "Exploiting")
             end
         end
     else
-        DropPlayer(src, "Exploiting") 
+        DropPlayer(src, "Exploiting")
     end
 end)
 
