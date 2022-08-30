@@ -102,12 +102,13 @@ RegisterNetEvent('qb-jewellery:server:vitrineReward', function(vitrineIndex)
     end
 
     if cheating then
-        if flags[src] then
-            flags[src] = flags[src] + 1
+        local license = Player.PlayerData.license
+        if flags[license] then
+            flags[license] = flags[license] + 1
         else
-            flags[src] = 1
+            flags[license] = 1
         end
-        if flags[src] >= 3 then
+        if flags[license] >= 3 then
             exploitBan("Getting flagged many times from exploiting the \"qb-jewellery:server:vitrineReward\" event")
         else
             DropPlayer(src, "Exploiting")
