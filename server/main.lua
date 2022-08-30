@@ -107,7 +107,7 @@ RegisterNetEvent('qb-jewellery:server:vitrineReward', function(vitrineIndex)
         else
             flags[src] = 1
         end
-        if flags >= 3 then
+        if flags[src] >= 3 then
             exploitBan("Getting flagged many times from exploiting the \"qb-jewellery:server:vitrineReward\" event")
         else
             DropPlayer(src, "Exploiting")
