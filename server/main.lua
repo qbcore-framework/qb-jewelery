@@ -2,6 +2,7 @@ local QBCore = exports['qb-core']:GetCoreObject()
 local timeOut = false
 
 local cachedPoliceAmount = {}
+local flags = {}
 
 -- Callback
 
@@ -16,6 +17,28 @@ QBCore.Functions.CreateCallback('qb-jewellery:server:getCops', function(source, 
     cb(amount)
 end)
 
+QBCore.Functions.CreateCallback('qb-jewellery:server:getVitrineState', function(_, cb)
+	cb(Config.Locations)
+end)
+
+-- Functions
+
+local function exploitBan(id, reason)
+    MySQL.insert('INSERT INTO bans (name, license, discord, ip, reason, expire, bannedby) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        {
+            GetPlayerName(id),
+            QBCore.Functions.GetIdentifier(id, 'license'),
+            QBCore.Functions.GetIdentifier(id, 'discord'),
+            QBCore.Functions.GetIdentifier(id, 'ip'),
+            reason,
+            2147483647,
+            'qb-pawnshop'
+        })
+    TriggerEvent('qb-log:server:CreateLog', 'pawnshop', 'Player Banned', 'red',
+        string.format('%s was banned by %s for %s', GetPlayerName(id), 'qb-pawnshop', reason), true)
+    DropPlayer(id, 'You were permanently banned by the server for: Exploiting')
+end
+
 -- Events
 
 RegisterNetEvent('qb-jewellery:server:setVitrineState', function(stateType, state, k)
@@ -25,18 +48,20 @@ RegisterNetEvent('qb-jewellery:server:setVitrineState', function(stateType, stat
     end
 end)
 
-QBCore.Functions.CreateCallback('qb-jewellery:server:getVitrineState', function(_, cb)
-	cb(Config.Locations)
-end)
-
 RegisterNetEvent('qb-jewellery:server:vitrineReward', function(vitrineIndex)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     local otherchance = math.random(1, 4)
     local odd = math.random(1, 4)
+    local cheating = false
 
-    if Config.Locations[vitrineIndex] == nil or Config.Locations[vitrineIndex].isOpened ~= false or cachedPoliceAmount[source] == nil then
+    if Config.Locations[vitrineIndex] == nil or Config.Locations[vitrineIndex].isOpened ~= false then
+        exploitBan(src, "Trying to trigger an exploitable event \"qb-jewellery:server:vitrineReward}\"")
+        return
+    end
+    if cachedPoliceAmount[source] == nil then
         DropPlayer(src, "Exploiting")
+        return
     end
 
     local plrPed = GetPlayerPed(src)
@@ -69,11 +94,24 @@ RegisterNetEvent('qb-jewellery:server:vitrineReward', function(vitrineIndex)
                     end
                 end
             else
-                DropPlayer(src, "Exploiting")
+                cheating = true
             end
         end
     else
-        DropPlayer(src, "Exploiting")
+        cheating = true
+    end
+
+    if cheating then
+        if flags[src] then 
+            flags[src] = flags[src] + 1 
+        else 
+            flags[src] = 1 
+        end
+        if flags >= 3 then
+            exploitBan("Getting flagged many times from exploiting the \"qb-jewellery:server:vitrineReward\" event")
+        else
+            DropPlayer(src, "Exploiting")
+        end
     end
 end)
 
