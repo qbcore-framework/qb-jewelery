@@ -75,9 +75,7 @@ local function smashVitrine(k)
                 disableMouse = false,
                 disableCombat = true,
             }, {}, {}, {}, function() -- Done
-                TriggerServerEvent('qb-jewellery:server:setVitrineState', "isOpened", true, k)
-                TriggerServerEvent('qb-jewellery:server:setVitrineState', "isBusy", false, k)
-                TriggerServerEvent('qb-jewellery:server:vitrineReward')
+                TriggerServerEvent('qb-jewellery:server:vitrineReward', k)
                 TriggerServerEvent('qb-jewellery:server:setTimeout')
                 TriggerServerEvent('police:server:policeAlert', 'Robbery in progress')
                 smashing = false
