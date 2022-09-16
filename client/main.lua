@@ -1,5 +1,6 @@
 local QBCore = exports['qb-core']:GetCoreObject()
 local firstAlarm = false
+local secondAlarm = false
 local smashing = false
 
 -- Functions
@@ -77,7 +78,10 @@ local function smashVitrine(k)
             }, {}, {}, {}, function() -- Done
                 TriggerServerEvent('qb-jewellery:server:vitrineReward', k)
                 TriggerServerEvent('qb-jewellery:server:setTimeout')
+	    if not secondAlarm then
                 TriggerServerEvent('police:server:policeAlert', 'Robbery in progress')
+		secondAlarm = true
+	    end
                 smashing = false
                 TaskPlayAnim(ped, animDict, "exit", 3.0, 3.0, -1, 2, 0, 0, 0, 0)
             end, function() -- Cancel
