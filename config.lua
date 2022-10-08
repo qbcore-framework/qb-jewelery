@@ -4,10 +4,39 @@ Config = Config or {}
 -- These have to be a string thanks to how Convars are returned.
 Config.UseTarget = GetConvar('UseTarget', 'false') == 'true'
 
+Config.CityDoor = "jewelery-citymain" -- edit this ID to your city jewelery main store door ID
+Config.CitySec = "jewelery-citysec"
+
+Config.VangelicoHours = { -- Store Hours
+    range = {
+        start = 6, -- When the doors unlock
+        ends = 18 -- When they lock for the night
+    }
+} 
+
+Config.Cooldown = 5 * (60 * 2000) -- where x is minutes ie. x * (60 * 2000) \\ For door auto lock function
+Config.Timeout = 5 * (60 * 2000) -- where x is minutes ie. x * (60 * 2000) \\ For actual robberry cooldown
 Config.Timeout = 30 * (60 * 2000)
 Config.RequiredCops = 2
+
+Config.DoorItem = 'thermite' -- item to remove\check for when placing a charge
+Config.ThermiteSettings = {
+    time = 60, -- time the hack displays for \\ half being showing the puzzle and the other solving
+    gridsize = 5, -- (5, 6, 7, 8, 9, 10) size of grid by square units, ie. gridsize = 5 is a 5 * 5 (25) square grid
+    incorrectBlocks = 10 -- incorrectBlocks = number of incorrect blocks after which the game will fail
+}
+
 Config.JewelleryLocation = {
     ["coords"] = vector3(-630.5, -237.13, 38.08),
+}
+
+Config.Hacks = {
+    ["city"] = { -- City Vangelico's \\ Rooftop Thermite
+        {coords = vector4(-596.02, -283.7, 50.4, 304.5), anim = vector4(-596.02, -283.7, 50.4, 304.5), effect = vector3(-596.02, -283.7, 50.19), isOpen = false},
+    },
+        ["pc"] = { -- City Vangelico's \\ PC Hack 
+        {coords = vector4(-631.03, -229.55, 39.23, 175.41), anim = vector4(-631.03, -229.55, 39.23, 180.18), isOpen = false},
+    },
 }
 
 Config.WhitelistedWeapons = {
