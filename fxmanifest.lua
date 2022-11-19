@@ -2,7 +2,7 @@ fx_version 'cerulean'
 game 'gta5'
 
 description 'QB-Jewelry'
-version '1.0.0'
+version '1.2.0'
 
 shared_scripts {
     '@qb-core/shared/locale.lua',
@@ -17,7 +17,7 @@ client_script {
     'client/main.lua'
 }
 server_scripts {
-    "@oxmysql/lib/MySQL.lua",
+    '@oxmysql/lib/MySQL.lua',
     'server/main.lua'
 }
 
