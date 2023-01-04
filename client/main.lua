@@ -38,11 +38,11 @@ local function IsWearingHandshoes()
     local model = GetEntityModel(PlayerPedId())
     local retval = true
     if model == `mp_m_freemode_01` then
-        if Config.MaleNoHandshoes[armIndex] ~= nil and Config.MaleNoHandshoes[armIndex] then
+        if Config.MaleNogloves[armIndex] ~= nil and Config.MaleNogloves[armIndex] then
             retval = false
         end
     else
-        if Config.FemaleNoHandshoes[armIndex] ~= nil and Config.FemaleNoHandshoes[armIndex] then
+        if Config.FemaleNoGloves[armIndex] ~= nil and Config.FemaleNoGloves[armIndex] then
             retval = false
         end
     end
