@@ -41,6 +41,16 @@ end
 
 -- Events
 
+RegisterNetEvent('PoliceNotify', function()
+    local src = source
+    local Player = QBCore.Functions.GetPlayer(src)
+    print(Player.PlayerData.job.name)
+    if Player.PlayerData.job.name == "police" then
+        TriggerClientEvent('Sendmail',src)
+    end 
+end)
+
+
 RegisterNetEvent('qb-jewellery:server:setVitrineState', function(stateType, state, k)
     if stateType == "isBusy" and type(state) == "boolean" and Config.Locations[k] then
         Config.Locations[k][stateType] = state
