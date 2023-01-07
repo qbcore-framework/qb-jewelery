@@ -49,6 +49,15 @@ local function IsWearingHandshoes()
     return retval
 end
 
+RegisterNetEvent('Sendmail', function()
+    TriggerEvent('qb-phone:client:CustomNotification', 
+    "Robbery In Progress", 
+    "Vangelico Robbery", 
+    'fas fa-car', 
+    '#ff002f', 
+    10000)
+end)
+
 local function smashVitrine(k)
     if not firstAlarm then
         TriggerServerEvent('police:server:policeAlert', 'Suspicious Activity')
@@ -78,6 +87,7 @@ local function smashVitrine(k)
                 TriggerServerEvent('qb-jewellery:server:vitrineReward', k)
                 TriggerServerEvent('qb-jewellery:server:setTimeout')
                 TriggerServerEvent('police:server:policeAlert', 'Robbery in progress')
+		TriggerServerEvent("PoliceNotify")
                 smashing = false
                 TaskPlayAnim(ped, animDict, "exit", 3.0, 3.0, -1, 2, 0, 0, 0, 0)
             end, function() -- Cancel
