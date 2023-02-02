@@ -50,11 +50,6 @@ local function IsWearingHandshoes()
 end
 
 local function smashVitrine(k)
-    --if not firstAlarm then
-    ---    TriggerServerEvent('police:server:policeAlert', Lang:t('info.suspicious_activity'))
-    ---    firstAlarm = true
-    --end
-
     QBCore.Functions.TriggerCallback('qb-jewellery:server:getCops', function(cops)
         if cops >= Config.RequiredCops then
             TriggerServerEvent('police:server:policeAlert', Lang:t('info.suspicious_activity'))
