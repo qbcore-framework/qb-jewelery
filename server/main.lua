@@ -34,9 +34,9 @@ local function exploitBan(id, reason)
             2147483647,
             'qb-jewelery'
         })
-    TriggerEvent('qb-log:server:CreateLog', 'jewelery', 'Player Banned', 'red',
+    TriggerEvent('qb-log:server:CreateLog', 'jewelery', Lang:t('info.player_banned'), 'red',
         string.format('%s was banned by %s for %s', GetPlayerName(id), 'qb-jewelery', reason), true)
-    DropPlayer(id, 'You were permanently banned by the server for: Exploiting')
+    DropPlayer(id, Lang:t('error.banned_for_exploiting'))
 end
 
 -- Events
@@ -56,11 +56,11 @@ RegisterNetEvent('qb-jewellery:server:vitrineReward', function(vitrineIndex)
     local cheating = false
 
     if Config.Locations[vitrineIndex] == nil or Config.Locations[vitrineIndex].isOpened ~= false then
-        exploitBan(src, "Trying to trigger an exploitable event \"qb-jewellery:server:vitrineReward\"")
+        exploitBan(src, Lang:t('error.trigger_exploitable_event'))
         return
     end
     if cachedPoliceAmount[source] == nil then
-        DropPlayer(src, "Exploiting")
+        DropPlayer(src, Lang:t('error.exploiting'))
         return
     end
 
@@ -109,9 +109,9 @@ RegisterNetEvent('qb-jewellery:server:vitrineReward', function(vitrineIndex)
             flags[license] = 1
         end
         if flags[license] >= 3 then
-            exploitBan("Getting flagged many times from exploiting the \"qb-jewellery:server:vitrineReward\" event")
+            exploitBan(Lang:t('error.getting_flagged'))
         else
-            DropPlayer(src, "Exploiting")
+            DropPlayer(src, Lang:t('error.exploiting'))
         end
     end
 end)

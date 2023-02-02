@@ -50,13 +50,10 @@ local function IsWearingHandshoes()
 end
 
 local function smashVitrine(k)
-    if not firstAlarm then
-        TriggerServerEvent('police:server:policeAlert', 'Suspicious Activity')
-        firstAlarm = true
-    end
-
     QBCore.Functions.TriggerCallback('qb-jewellery:server:getCops', function(cops)
         if cops >= Config.RequiredCops then
+            TriggerServerEvent('police:server:policeAlert', Lang:t('info.suspicious_activity'))
+            firstAlarm = true
             local animDict = "missheist_jewel"
             local animName = "smash_case"
             local ped = PlayerPedId()
@@ -77,7 +74,7 @@ local function smashVitrine(k)
             }, {}, {}, {}, function() -- Done
                 TriggerServerEvent('qb-jewellery:server:vitrineReward', k)
                 TriggerServerEvent('qb-jewellery:server:setTimeout')
-                TriggerServerEvent('police:server:policeAlert', 'Robbery in progress')
+                TriggerServerEvent('police:server:policeAlert', Lang:t('info.robbery_progress'))
                 smashing = false
                 TaskPlayAnim(ped, animDict, "exit", 3.0, 3.0, -1, 2, 0, 0, 0, 0)
             end, function() -- Cancel
@@ -126,7 +123,7 @@ CreateThread(function()
     SetBlipAsShortRange(Dealer, true)
     SetBlipColour(Dealer, 3)
     BeginTextCommandSetBlipName("STRING")
-    AddTextComponentSubstringPlayerName("Vangelico Jewelry")
+    AddTextComponentSubstringPlayerName(Lang:t('info.blip_name'))
     EndTextCommandSetBlipName(Dealer)
 end)
 
