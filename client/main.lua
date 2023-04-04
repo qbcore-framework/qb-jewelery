@@ -55,7 +55,7 @@ local function smashVitrine(k)
         firstAlarm = true
     end
 
-    QBCore.Functions.TriggerCallback('qb-jewellery:server:getCops', function(cops)
+    QBCore.Functions.TriggerCallback('qb-jewelry:server:getCops', function(cops)
         if cops >= Config.RequiredCops then
             local animDict = "missheist_jewel"
             local animName = "smash_case"
@@ -75,17 +75,17 @@ local function smashVitrine(k)
                 disableMouse = false,
                 disableCombat = true,
             }, {}, {}, {}, function() -- Done
-                TriggerServerEvent('qb-jewellery:server:vitrineReward', k)
-                TriggerServerEvent('qb-jewellery:server:setTimeout')
+                TriggerServerEvent('qb-jewelry:server:vitrineReward', k)
+                TriggerServerEvent('qb-jewelry:server:setTimeout')
                 TriggerServerEvent('police:server:policeAlert', 'Robbery in progress')
                 smashing = false
                 TaskPlayAnim(ped, animDict, "exit", 3.0, 3.0, -1, 2, 0, 0, 0, 0)
             end, function() -- Cancel
-                TriggerServerEvent('qb-jewellery:server:setVitrineState', "isBusy", false, k)
+                TriggerServerEvent('qb-jewelry:server:setVitrineState', "isBusy", false, k)
                 smashing = false
                 TaskPlayAnim(ped, animDict, "exit", 3.0, 3.0, -1, 2, 0, 0, 0, 0)
             end)
-            TriggerServerEvent('qb-jewellery:server:setVitrineState', "isBusy", true, k)
+            TriggerServerEvent('qb-jewelry:server:setVitrineState', "isBusy", true, k)
 
             CreateThread(function()
                 while smashing do
@@ -107,19 +107,19 @@ end
 -- Events
 
 RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
-	QBCore.Functions.TriggerCallback('qb-jewellery:server:getVitrineState', function(result)
+	QBCore.Functions.TriggerCallback('qb-jewelry:server:getVitrineState', function(result)
 		Config.Locations = result
 	end)
 end)
 
-RegisterNetEvent('qb-jewellery:client:setVitrineState', function(stateType, state, k)
+RegisterNetEvent('qb-jewelry:client:setVitrineState', function(stateType, state, k)
     Config.Locations[k][stateType] = state
 end)
 
 -- Threads
 
 CreateThread(function()
-    local Dealer = AddBlipForCoord(Config.JewelleryLocation["coords"]["x"], Config.JewelleryLocation["coords"]["y"], Config.JewelleryLocation["coords"]["z"])
+    local Dealer = AddBlipForCoord(Config.jewelryLocation["coords"]["x"], Config.jewelryLocation["coords"]["y"], Config.jewelryLocation["coords"]["z"])
     SetBlipSprite (Dealer, 617)
     SetBlipDisplay(Dealer, 4)
     SetBlipScale  (Dealer, 0.7)
