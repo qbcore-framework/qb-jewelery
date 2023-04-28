@@ -33,16 +33,16 @@ local function validWeapon()
     return false
 end
 
-local function IsWearingHandshoes()
+local function IsWearingGloves()
     local armIndex = GetPedDrawableVariation(PlayerPedId(), 3)
     local model = GetEntityModel(PlayerPedId())
     local retval = true
     if model == `mp_m_freemode_01` then
-        if Config.MaleNoHandshoes[armIndex] ~= nil and Config.MaleNoHandshoes[armIndex] then
+        if Config.MaleNoGloves[armIndex] ~= nil and Config.MaleNoGloves[armIndex] then
             retval = false
         end
     else
-        if Config.FemaleNoHandshoes[armIndex] ~= nil and Config.FemaleNoHandshoes[armIndex] then
+        if Config.FemaleNoGloves[armIndex] ~= nil and Config.FemaleNoGloves[armIndex] then
             retval = false
         end
     end
@@ -62,9 +62,9 @@ local function smashVitrine(k)
             local ped = PlayerPedId()
             local plyCoords = GetOffsetFromEntityInWorldCoords(ped, 0, 0.6, 0)
             local pedWeapon = GetSelectedPedWeapon(ped)
-            if math.random(1, 100) <= 80 and not IsWearingHandshoes() then
+            if math.random(1, 100) <= 80 and not IsWearingGloves() then
                 TriggerServerEvent("evidence:server:CreateFingerDrop", plyCoords)
-            elseif math.random(1, 100) <= 5 and IsWearingHandshoes() then
+            elseif math.random(1, 100) <= 5 and IsWearingGloves() then
                 TriggerServerEvent("evidence:server:CreateFingerDrop", plyCoords)
                 QBCore.Functions.Notify(Lang:t('error.fingerprints'), "error")
             end
