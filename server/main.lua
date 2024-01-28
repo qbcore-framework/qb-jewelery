@@ -39,6 +39,19 @@ local function exploitBan(id, reason)
     DropPlayer(id, 'You were permanently banned by the server for: Exploiting')
 end
 
+local function getRewardBasedOnProbability(table)
+    local random, probability = math.random(), 0
+
+    for k, v in pairs(table) do
+        probability = probability + v.probability
+        if random <= probability then
+            return k
+        end
+    end
+
+    return math.random(#table)
+end
+
 -- Events
 
 RegisterNetEvent('qb-jewellery:server:setVitrineState', function(stateType, state, k)
@@ -51,8 +64,6 @@ end)
 RegisterNetEvent('qb-jewellery:server:vitrineReward', function(vitrineIndex)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
-    local otherchance = math.random(1, 4)
-    local odd = math.random(1, 4)
     local cheating = false
 
     if Config.Locations[vitrineIndex] == nil or Config.Locations[vitrineIndex].isOpened ~= false then
@@ -77,21 +88,13 @@ RegisterNetEvent('qb-jewellery:server:vitrineReward', function(vitrineIndex)
                 TriggerClientEvent('qb-jewellery:client:setVitrineState', -1, 'isOpened', true, vitrineIndex)
                 TriggerClientEvent('qb-jewellery:client:setVitrineState', -1, 'isBusy', false, vitrineIndex)
 
-                if otherchance == odd then
-                    local item = math.random(1, #Config.VitrineRewards)
-                    local amount = math.random(Config.VitrineRewards[item]['amount']['min'], Config.VitrineRewards[item]['amount']['max'])
-                    if Player.Functions.AddItem(Config.VitrineRewards[item]['item'], amount) then
-                        TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[Config.VitrineRewards[item]['item']], 'add')
-                    else
-                        TriggerClientEvent('QBCore:Notify', src, Lang:t('error.to_much'), 'error')
-                    end
+                local item = getRewardBasedOnProbability(Config.VitrineRewards)
+                local amount = math.random(Config.VitrineRewards[item]['amount']['min'], Config.VitrineRewards[item]['amount']['max'])
+
+                if Player.Functions.AddItem(Config.VitrineRewards[item]['item'], amount) then
+                    TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[Config.VitrineRewards[item]['item']], 'add')
                 else
-                    local amount = math.random(2, 4)
-                    if Player.Functions.AddItem('tenkgoldchain', amount) then
-                        TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['tenkgoldchain'], 'add')
-                    else
-                        TriggerClientEvent('QBCore:Notify', src, Lang:t('error.to_much'), 'error')
-                    end
+                    TriggerClientEvent('QBCore:Notify', src, Lang:t('error.to_much'), 'error')
                 end
             else
                 cheating = true
