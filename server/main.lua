@@ -65,7 +65,6 @@ RegisterNetEvent('qb-jewellery:server:vitrineReward', function(vitrineIndex)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     local cheating = false
-
     if Config.Locations[vitrineIndex] == nil or Config.Locations[vitrineIndex].isOpened ~= false then
         exploitBan(src, 'Trying to trigger an exploitable event \"qb-jewellery:server:vitrineReward\"')
         return
@@ -74,11 +73,9 @@ RegisterNetEvent('qb-jewellery:server:vitrineReward', function(vitrineIndex)
         DropPlayer(src, 'Exploiting')
         return
     end
-
     local plrPed = GetPlayerPed(src)
     local plrCoords = GetEntityCoords(plrPed)
     local vitrineCoords = Config.Locations[vitrineIndex].coords
-
     if cachedPoliceAmount[source] >= Config.RequiredCops then
         if plrPed then
             local dist = #(plrCoords - vitrineCoords)
@@ -87,12 +84,10 @@ RegisterNetEvent('qb-jewellery:server:vitrineReward', function(vitrineIndex)
                 Config.Locations[vitrineIndex]['isBusy'] = false
                 TriggerClientEvent('qb-jewellery:client:setVitrineState', -1, 'isOpened', true, vitrineIndex)
                 TriggerClientEvent('qb-jewellery:client:setVitrineState', -1, 'isBusy', false, vitrineIndex)
-
                 local item = getRewardBasedOnProbability(Config.VitrineRewards)
                 local amount = math.random(Config.VitrineRewards[item]['amount']['min'], Config.VitrineRewards[item]['amount']['max'])
-
-                if Player.Functions.AddItem(Config.VitrineRewards[item]['item'], amount) then
-                    TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[Config.VitrineRewards[item]['item']], 'add')
+                if exports['qb-inventory']:AddItem(src, Config.VitrineRewards[item]['item'], amount, false, false, 'qb-jewellery:server:vitrineReward') then
+                    TriggerClientEvent('qb-inventory:client:ItemBox', src, QBCore.Shared.Items[Config.VitrineRewards[item]['item']], 'add')
                 else
                     TriggerClientEvent('QBCore:Notify', src, Lang:t('error.to_much'), 'error')
                 end
@@ -103,7 +98,6 @@ RegisterNetEvent('qb-jewellery:server:vitrineReward', function(vitrineIndex)
     else
         cheating = true
     end
-
     if cheating then
         local license = Player.PlayerData.license
         if flags[license] then
