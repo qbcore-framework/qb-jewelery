@@ -1,7 +1,4 @@
 Config = Config or {}
-
--- Set to true or false or GetConvar('UseTarget', 'false') == 'true' to use global option or script specific
--- These have to be a string thanks to how Convars are returned.
 Config.UseTarget = GetConvar('UseTarget', 'false') == 'true'
 
 Config.Timeout = 30 * (60 * 2000)

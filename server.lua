@@ -1,4 +1,5 @@
-local QBCore = exports['qb-core']:GetCoreObject()
+local QBCore = exports['qb-core']:GetCoreObject({ 'Functions' })
+local sharedItems = exports['qb-core']:GetShared('Items')
 local timeOut = false
 
 local cachedPoliceAmount = {}
@@ -63,7 +64,7 @@ end)
 
 RegisterNetEvent('qb-jewellery:server:vitrineReward', function(vitrineIndex)
     local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
+    local Player = exports['qb-core']:GetPlayer(src)
     local cheating = false
     if Config.Locations[vitrineIndex] == nil or Config.Locations[vitrineIndex].isOpened ~= false then
         exploitBan(src, 'Trying to trigger an exploitable event \"qb-jewellery:server:vitrineReward\"')
@@ -87,7 +88,7 @@ RegisterNetEvent('qb-jewellery:server:vitrineReward', function(vitrineIndex)
                 local item = getRewardBasedOnProbability(Config.VitrineRewards)
                 local amount = math.random(Config.VitrineRewards[item]['amount']['min'], Config.VitrineRewards[item]['amount']['max'])
                 if exports['qb-inventory']:AddItem(src, Config.VitrineRewards[item]['item'], amount, false, false, 'qb-jewellery:server:vitrineReward') then
-                    TriggerClientEvent('qb-inventory:client:ItemBox', src, QBCore.Shared.Items[Config.VitrineRewards[item]['item']], 'add')
+                    TriggerClientEvent('qb-inventory:client:ItemBox', src, sharedItems[Config.VitrineRewards[item]['item']], 'add')
                 else
                     TriggerClientEvent('QBCore:Notify', src, Lang:t('error.to_much'), 'error')
                 end
